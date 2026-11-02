@@ -41,7 +41,7 @@ export function ApprovalRangeEdit({ review }: { review: ExcelRangeEditReview }) 
   return (
     <div className={css.RangeEdit}>
       <div className={css.Header}>
-        <Text size="T300" className={css.Target}>
+        <Text size="T300" className={css.Target} dir="ltr">
           {rangeLabel(review.worksheet, review.address)}
         </Text>
         {review.webUrl && (
@@ -69,13 +69,13 @@ export function ApprovalRangeEdit({ review }: { review: ExcelRangeEditReview }) 
             <tbody>
               {shown.map((change) => (
                 <tr key={change.cell}>
-                  <th scope="row" className={css.Cell}>
+                  <th scope="row" className={css.Cell} dir="ltr">
                     {change.cell}
                   </th>
-                  <td className={classNames(css.Value, css.Before)}>
+                  <td className={classNames(css.Value, css.Before)} dir="auto">
                     <CellValue value={change.before} exact={looksUnchanged(change)} />
                   </td>
-                  <td className={css.Value}>
+                  <td className={css.Value} dir="auto">
                     {change.after === null ? (
                       <span className={css.Muted}>
                         {t('mindroomUi.messages.approvalRangeEdit.valueKept')}

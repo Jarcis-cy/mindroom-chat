@@ -72,8 +72,8 @@ const workbookUrl = (value: unknown): string | null => {
 };
 
 // Equal only when nothing hides a difference: same type and value, and no redacted text on either side.
-// The backend leaves such cells unwritten. Matrix carries floats as text, so a number and the same text compare
-// equal here; the backend still tells them apart and writes the text.
+// Matrix carries floats as text, so a number and the same text compare equal here; the backend leaves equal cells
+// unwritten and refuses a change between a number and the same text, so a cell shown unchanged is never written.
 const unchanged = (before: ExcelCellValue, after: ExcelCellValue): boolean =>
   typeof before === typeof after &&
   before === after &&

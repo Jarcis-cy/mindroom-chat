@@ -8,7 +8,8 @@ import { ApprovalArguments } from './ApprovalArguments';
 import { parseToolApprovalContent } from './toolApproval';
 
 vi.mock('../../hooks/useMatrixClient', () => ({ useMatrixClient: () => ({}) }));
-vi.mock('./sidecarDownload', () => ({ downloadMindroomSidecarBlob: vi.fn() }));
+const mocks = vi.hoisted(() => ({ download: vi.fn() }));
+vi.mock('./sidecarDownload', () => ({ downloadMindroomSidecarBlob: mocks.download }));
 vi.mock('./ApprovalArgumentFields.css', () => ({
   Fields: 'Fields',
   Key: 'Key',
@@ -85,6 +86,11 @@ describe('Excel range edit approvals', () => {
     expect(renderer.root.findByProps({ className: 'Host' }).children).toEqual([
       'contoso.sharepoint.com',
     ]);
+    // Right-to-left layouts would otherwise reorder addresses and formulas.
+    expect(renderer.root.findByProps({ className: 'Target' }).props.dir).toBe('ltr');
+    expect(renderer.root.findAllByType('td').map((cell) => cell.props.dir)).toEqual(
+      Array(4).fill('auto')
+    );
   });
 
   it('show both sides exactly when a change would otherwise look unchanged', () => {
@@ -104,18 +110,29 @@ describe('Excel range edit approvals', () => {
       expect(text).toContain(JSON.stringify(shown).slice(1, -1));
   });
 
-  it('wait for the complete arguments when the card shows a truncated preview', () => {
+  it('load the complete arguments without a click when the card shows a truncated preview', async () => {
     // A preview can keep the grids whole while dropping number_formats, which would hide format changes.
     const { number_formats: _dropped, ...preview } = ARGUMENTS;
-    const text = render(
-      approvalFor({
-        arguments: preview,
-        arguments_truncated: true,
-        full_arguments_url: 'mxc://x/y',
+    let resolve: (blob: Blob) => void = () => undefined;
+    mocks.download.mockReturnValueOnce(
+      new Promise<Blob>((settle) => {
+        resolve = settle;
       })
     );
+    const approval = approvalFor({
+      arguments: preview,
+      arguments_truncated: true,
+      full_arguments_url: 'mxc://x/y',
+    });
 
+    const text = render(approval);
     expect(text).not.toContain('Before');
+    expect(text).toContain('Loading complete arguments');
+
+    await act(async () => resolve(new Blob([JSON.stringify(ARGUMENTS)])));
+    const loaded = JSON.stringify(renderer.toJSON());
+    expect(loaded).toContain('Before');
+    expect(loaded).toContain('Format: @');
   });
 
   it('use complete arguments the card carries next to a truncated preview', () => {
