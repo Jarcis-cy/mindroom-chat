@@ -17,8 +17,9 @@ const MAX_SHOWN_CHANGES = 200;
 const rangeLabel = (worksheet: string, address: string) =>
   `'${worksheet.replace(/'/g, "''")}'!${address}`;
 
-// Format and control characters, such as a zero-width space or a direction override, draw nothing.
-const INVISIBLE = /[\p{Cf}\p{Cc}]/gu;
+// Control, format, and other default-ignorable characters, such as a zero-width space, a direction override, or
+// a combining grapheme joiner, draw nothing.
+const INVISIBLE = /[\p{Cc}\p{Cf}\p{Default_Ignorable_Code_Point}]/gu;
 
 const shownText = (value: ExcelCellValue): string =>
   typeof value === 'boolean' ? (value ? 'TRUE' : 'FALSE') : String(value);
@@ -31,7 +32,7 @@ function CellValue({ value, exact }: { value: ExcelCellValue; exact: boolean }) 
       <>
         {JSON.stringify(value).replace(
           INVISIBLE,
-          (character) => `\\u${character.charCodeAt(0).toString(16).padStart(4, '0')}`
+          (character) => `\\u{${character.codePointAt(0)?.toString(16)}}`
         )}
       </>
     );
