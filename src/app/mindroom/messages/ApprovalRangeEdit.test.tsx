@@ -25,6 +25,7 @@ vi.mock('./ApprovalRangeEdit.css', () => ({
   Header: 'Header',
   Target: 'Target',
   Links: 'Links',
+  Host: 'Host',
   Scroll: 'Scroll',
   Table: 'Table',
   Cell: 'Cell',
@@ -81,12 +82,34 @@ describe('Excel range edit approvals', () => {
       expect(text).toContain(part);
     const hrefs = renderer.root.findAllByType('a').map((link) => link.props.href);
     expect(hrefs).toEqual([`ms-excel:ofe|u|${WEB_URL}`, WEB_URL]);
+    expect(renderer.root.findByProps({ className: 'Host' }).children).toEqual([
+      'contoso.sharepoint.com',
+    ]);
+  });
+
+  it('show both sides exactly when a change would otherwise look unchanged', () => {
+    const text = render(
+      approvalFor({
+        arguments: {
+          ...ARGUMENTS,
+          address: 'A1:D1',
+          values: [[42, true, 'a ', 'empty']],
+          expected_formulas: [['42', 'TRUE', 'a', '']],
+          number_formats: null,
+        },
+      })
+    );
+
+    for (const shown of ['"42"', '42', '"TRUE"', 'true', '"a"', '"a "', '""', '"empty"'])
+      expect(text).toContain(JSON.stringify(shown).slice(1, -1));
   });
 
   it('wait for the complete arguments when the card shows a truncated preview', () => {
+    // A preview can keep the grids whole while dropping number_formats, which would hide format changes.
+    const { number_formats: _dropped, ...preview } = ARGUMENTS;
     const text = render(
       approvalFor({
-        arguments: { address: 'B2:C2' },
+        arguments: preview,
         arguments_truncated: true,
         full_arguments_url: 'mxc://x/y',
       })

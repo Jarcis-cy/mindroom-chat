@@ -26,7 +26,7 @@ describe('parseExcelRangeEdit', () => {
     expect(review).toEqual({
       worksheet: 'Budget',
       address: 'B2:C3',
-      webUrl: WEB_URL,
+      webUrl: new URL(WEB_URL).href,
       changes: [{ cell: 'C2', before: 1000, after: 1200, numberFormat: null }],
       unchangedCount: 3,
     });
@@ -137,6 +137,8 @@ describe('parseExcelRangeEdit', () => {
 
   it.each([
     'http://contoso.sharepoint.com/Forecast.xlsx',
+    'https://onedrive.live.com/edit?id=1',
+    'https://1drv.ms/x/s!abc',
     'https://contoso.sharepoint.com.evil.example/Forecast.xlsx',
     'https://user:pass@contoso.sharepoint.com/Forecast.xlsx',
     'not a url',
@@ -146,14 +148,12 @@ describe('parseExcelRangeEdit', () => {
     ).toBeNull();
   });
 
-  it.each([
-    'https://onedrive.live.com/edit?id=1',
-    'https://1drv.ms/x/s!abc',
-    'https://contoso-my.sharepoint.com/personal/a/x.xlsx',
-  ])('links a workbook in OneDrive or SharePoint: %s', (url) => {
+  it('links a SharePoint or OneDrive for work or school workbook by its encoded address', () => {
+    const url = 'https://contoso-my.sharepoint.com/personal/a/Documents/Q3 plan.xlsx';
+
     expect(
       parseExcelRangeEdit(EXCEL_RANGE_EDIT_TOOL, edit({ expected_web_url: url }))?.webUrl
-    ).toBe(url);
+    ).toBe('https://contoso-my.sharepoint.com/personal/a/Documents/Q3%20plan.xlsx');
   });
 });
 

@@ -28,6 +28,12 @@ export const Links = style({
   fontSize: toRem(13),
 });
 
+// The workbook's host, so a reviewer sees where the links lead before opening them.
+export const Host = style({
+  opacity: config.opacity.P400,
+  overflowWrap: 'anywhere',
+});
+
 export const Scroll = style({
   maxHeight: toRem(320),
   overflow: 'auto',

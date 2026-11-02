@@ -2,30 +2,42 @@ import { useTranslation } from 'react-i18next';
 import React from 'react';
 import { Text } from 'folds';
 import classNames from 'classnames';
-import { ExcelCellValue, ExcelRangeEditReview, excelDesktopUrl } from './excelRangeEdit';
+import {
+  ExcelCellChange,
+  ExcelCellValue,
+  ExcelRangeEditReview,
+  excelDesktopUrl,
+} from './excelRangeEdit';
 import * as css from './ApprovalRangeEdit.css';
 
 // Enough rows to review by eye; the full argument view lists every cell.
 const MAX_SHOWN_CHANGES = 200;
 
-// Excel's own notation: a sheet name with anything but letters, digits, and underscores is quoted.
+// Excel's notation, quoting the sheet name, which is always valid.
 const rangeLabel = (worksheet: string, address: string) =>
-  /^[\p{L}\p{N}_]+$/u.test(worksheet)
-    ? `${worksheet}!${address}`
-    : `'${worksheet.replace(/'/g, "''")}'!${address}`;
+  `'${worksheet.replace(/'/g, "''")}'!${address}`;
 
-function CellValue({ value }: { value: ExcelCellValue }) {
+const shownText = (value: ExcelCellValue): string =>
+  typeof value === 'boolean' ? (value ? 'TRUE' : 'FALSE') : String(value);
+
+function CellValue({ value, exact }: { value: ExcelCellValue; exact: boolean }) {
   const { t } = useTranslation();
+  // Exact values show their type: "42" is text, 42 a number, and true a boolean.
+  if (exact) return <>{JSON.stringify(value)}</>;
   if (value === '')
     return <span className={css.Muted}>{t('mindroomUi.messages.approvalRangeEdit.empty')}</span>;
-  if (typeof value === 'boolean') return <>{value ? 'TRUE' : 'FALSE'}</>;
-  return <>{String(value)}</>;
+  return <>{shownText(value)}</>;
 }
 
 /** The cells an Excel range edit changes, before and after, with links to the workbook. */
 export function ApprovalRangeEdit({ review }: { review: ExcelRangeEditReview }) {
   const { t } = useTranslation();
   const shown = review.changes.slice(0, MAX_SHOWN_CHANGES);
+  const rendered = (value: ExcelCellValue) =>
+    value === '' ? t('mindroomUi.messages.approvalRangeEdit.empty') : shownText(value).trim();
+  // A change between values that would look alike, such as "42" and 42 or "a" and "a ", shows both exactly.
+  const looksUnchanged = ({ before, after }: ExcelCellChange) =>
+    after !== null && after !== before && rendered(before) === rendered(after);
   return (
     <div className={css.RangeEdit}>
       <div className={css.Header}>
@@ -34,6 +46,7 @@ export function ApprovalRangeEdit({ review }: { review: ExcelRangeEditReview }) 
         </Text>
         {review.webUrl && (
           <span className={css.Links}>
+            <span className={css.Host}>{new URL(review.webUrl).hostname}</span>
             <a href={excelDesktopUrl(review.webUrl)}>
               {t('mindroomUi.messages.approvalRangeEdit.openInExcel')}
             </a>
@@ -60,7 +73,7 @@ export function ApprovalRangeEdit({ review }: { review: ExcelRangeEditReview }) 
                     {change.cell}
                   </th>
                   <td className={classNames(css.Value, css.Before)}>
-                    <CellValue value={change.before} />
+                    <CellValue value={change.before} exact={looksUnchanged(change)} />
                   </td>
                   <td className={css.Value}>
                     {change.after === null ? (
@@ -68,7 +81,7 @@ export function ApprovalRangeEdit({ review }: { review: ExcelRangeEditReview }) 
                         {t('mindroomUi.messages.approvalRangeEdit.valueKept')}
                       </span>
                     ) : (
-                      <CellValue value={change.after} />
+                      <CellValue value={change.after} exact={looksUnchanged(change)} />
                     )}
                     {change.numberFormat !== null && (
                       <span className={css.Format}>

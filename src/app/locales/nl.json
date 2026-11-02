@@ -2539,8 +2539,8 @@
       },
       "approvalRangeEdit": {
         "cell": "Cel",
-        "before": "Voor",
-        "after": "Na",
+        "before": "Oud",
+        "after": "Nieuw",
         "empty": "leeg",
         "valueKept": "waarde blijft",
         "numberFormat": "Opmaak: {{format}}",

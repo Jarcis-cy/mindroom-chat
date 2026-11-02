@@ -15,7 +15,7 @@ export type ExcelCellChange = {
 export type ExcelRangeEditReview = {
   worksheet: string;
   address: string;
-  // The workbook's address in OneDrive or SharePoint; null for any other address an agent passed.
+  // The workbook's address in SharePoint or OneDrive for work or school; null for any other address an agent passed.
   webUrl: string | null;
   changes: ExcelCellChange[];
   unchangedCount: number;
@@ -24,7 +24,6 @@ export type ExcelRangeEditReview = {
 // The backend's redaction placeholder: two different secrets redact to the same text.
 const REDACTED = '***redacted***';
 const ADDRESS = /^\$?([A-Za-z]{1,3})\$?(\d{1,7})(?::\$?([A-Za-z]{1,3})\$?(\d{1,7}))?$/;
-const WORKBOOK_HOSTS = new Set(['onedrive.live.com', '1drv.ms']);
 
 const columnNumber = (letters: string): number =>
   [...letters.toUpperCase()].reduce((total, letter) => total * 26 + letter.charCodeAt(0) - 64, 0);
@@ -63,9 +62,8 @@ const workbookUrl = (value: unknown): string | null => {
   if (typeof value !== 'string') return null;
   try {
     const url = new URL(value);
-    const host = url.hostname.toLowerCase();
-    const trusted = host.endsWith('.sharepoint.com') || WORKBOOK_HOSTS.has(host);
-    return url.protocol === 'https:' && !url.username && !url.password && trusted ? value : null;
+    const trusted = url.hostname.toLowerCase().endsWith('.sharepoint.com');
+    return url.protocol === 'https:' && !url.username && !url.password && trusted ? url.href : null;
   } catch {
     return null;
   }

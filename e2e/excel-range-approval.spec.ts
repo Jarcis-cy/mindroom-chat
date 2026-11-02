@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-const WEB_URL = 'https://contoso.sharepoint.com/sites/finance/Shared Documents/Forecast.xlsx';
+const WEB_URL = 'https://contoso.sharepoint.com/sites/finance/Shared%20Documents/Forecast.xlsx';
 
 for (const theme of ['light', 'dark']) {
   for (const [device, width, height] of [
@@ -27,6 +27,7 @@ for (const theme of ['light', 'dark']) {
         'href',
         WEB_URL
       );
+      await expect(page.getByText('contoso.sharepoint.com', { exact: true })).toBeVisible();
       expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
       await page.getByTestId('approval').screenshot({
         path: test.info().outputPath(`excel-range-approval-${device}-${theme}.png`),
