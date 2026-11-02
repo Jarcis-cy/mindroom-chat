@@ -182,7 +182,7 @@ Both before and after footprints use the current configured release tag, while P
 ## Conflict rules
 
 - Preserve upstream ownership of `config.json` and place MindRoom runtime defaults in `config.mindroom.json`.
-  The current fork also intentionally sets `messageRendering.additionalAllowedUriSchemes` to `["obsidian"]` in the shared `config.json`; retain this existing compatibility setting when merging upstream changes.
+  The current fork also intentionally sets `messageRendering.additionalAllowedUriSchemes` to `["obsidian", "readdlespark"]` in the shared `config.json`; retain this existing compatibility setting when merging upstream changes.
 - The seven `mindroom-wrapper` entries in `.gitattributes` protect pure re-export wrappers.
   `bash scripts/setup-git-merge-drivers.sh` installs the optional local driver.
   The driver preserves wrappers but cannot port upstream behavior into `src/app/mindroom/`.

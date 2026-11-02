@@ -2,6 +2,15 @@
 
 ## Runbook
 
+### Open Spark email backlinks from messages (2026-11-02)
+
+- Why: Spark's `readdlespark://` backlinks open one email directly in Spark on desktop and mobile, but Chat drops their `href`, so the link text shows without a link.
+- Change: `config.json` and `config.mindroom.json` add `readdlespark` to `messageRendering.additionalAllowedUriSchemes`, next to `obsidian`.
+  The iOS app bundles `config.mindroom.json`, so it needs the scheme there; a web deployment that replaces `config.json` adds it to its own list.
+  Agent replies also need a runtime whose formatted-body sanitizer keeps the scheme (mindroom-ai/mindroom `_ALLOWED_URL_SCHEMES`); before that, the runtime strips the `href` from durable edits and only the live overlay links.
+- Tests: `runtimeConfig.test.ts` pins the shipped scheme list.
+- Next: none.
+
 ### Render live Markdown in linear time (2026-11-01)
 
 - Why: `renderLiveMarkdown` draws `io.mindroom.live_reasoning`, which Chat reads from any sender's message and renders on mount, and two of its rules took quadratic time.
