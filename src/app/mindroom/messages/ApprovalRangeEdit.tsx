@@ -17,13 +17,24 @@ const MAX_SHOWN_CHANGES = 200;
 const rangeLabel = (worksheet: string, address: string) =>
   `'${worksheet.replace(/'/g, "''")}'!${address}`;
 
+// Format and control characters, such as a zero-width space or a direction override, draw nothing.
+const INVISIBLE = /[\p{Cf}\p{Cc}]/gu;
+
 const shownText = (value: ExcelCellValue): string =>
   typeof value === 'boolean' ? (value ? 'TRUE' : 'FALSE') : String(value);
 
 function CellValue({ value, exact }: { value: ExcelCellValue; exact: boolean }) {
   const { t } = useTranslation();
   // Exact values show their type: "42" is text, 42 a number, and true a boolean.
-  if (exact) return <>{JSON.stringify(value)}</>;
+  if (exact)
+    return (
+      <>
+        {JSON.stringify(value).replace(
+          INVISIBLE,
+          (character) => `\\u${character.charCodeAt(0).toString(16).padStart(4, '0')}`
+        )}
+      </>
+    );
   if (value === '')
     return <span className={css.Muted}>{t('mindroomUi.messages.approvalRangeEdit.empty')}</span>;
   return <>{shownText(value)}</>;
@@ -34,7 +45,9 @@ export function ApprovalRangeEdit({ review }: { review: ExcelRangeEditReview }) 
   const { t } = useTranslation();
   const shown = review.changes.slice(0, MAX_SHOWN_CHANGES);
   const rendered = (value: ExcelCellValue) =>
-    value === '' ? t('mindroomUi.messages.approvalRangeEdit.empty') : shownText(value).trim();
+    value === ''
+      ? t('mindroomUi.messages.approvalRangeEdit.empty')
+      : shownText(value).replace(INVISIBLE, '').trim();
   // A change between values that would look alike, such as "42" and 42 or "a" and "a ", shows both exactly.
   const looksUnchanged = ({ before, after }: ExcelCellChange) =>
     after !== null && after !== before && rendered(before) === rendered(after);

@@ -98,15 +98,25 @@ describe('Excel range edit approvals', () => {
       approvalFor({
         arguments: {
           ...ARGUMENTS,
-          address: 'A1:D1',
-          values: [[42, true, 'a ', 'empty']],
-          expected_formulas: [['42', 'TRUE', 'a', '']],
+          address: 'A1:E1',
+          values: [[42, true, 'a ', 'empty', 'abc\u200b']],
+          expected_formulas: [['42', 'TRUE', 'a', '', 'abc']],
           number_formats: null,
         },
       })
     );
 
-    for (const shown of ['"42"', '42', '"TRUE"', 'true', '"a"', '"a "', '""', '"empty"'])
+    for (const shown of [
+      '"42"',
+      '42',
+      '"TRUE"',
+      'true',
+      '"a"',
+      '"a "',
+      '""',
+      '"empty"',
+      '"abc\\u200b"',
+    ])
       expect(text).toContain(JSON.stringify(shown).slice(1, -1));
   });
 

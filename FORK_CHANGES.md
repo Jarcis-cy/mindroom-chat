@@ -7,9 +7,9 @@
 - Why: the approval card for MindRoom's `microsoft_files_excel_update_range` showed raw `values` and `expected_formulas` grids, so a reviewer could not see which cells an edit changes, and a formula replaced by a plain number looked like any other value.
 - Change: `excelRangeEdit.ts` reads the call's complete arguments as a per-cell diff: only changed cells, by Excel address, with before (`expected_formulas`), after (`values`, where `null` keeps the value), and any `number_formats` entry.
   A cell counts as unchanged only when type and value are equal and its text holds no `***redacted***`, because two different redacted secrets render the same; the backend leaves exactly those cells unwritten.
-  Matrix carries floats as text, so the number `1.5` and the text `"1.5"` compare equal here; the backend refuses a change between a number and the same text, so a cell the table shows as unchanged is never written.
+  Matrix carries floats and integers past 2**53 - 1 as text, so the number `1.5` and the text `"1.5"` compare equal here; the backend refuses a change between a number and the same text, so a cell the table shows as unchanged is never written.
   `ApprovalRangeEdit` draws the diff as a table above the argument fields, inside `ApprovalArguments`, so the card, the review panel, and the receipt all show it.
-  A change between values that would look alike, such as text `"42"` and the number `42`, or `"a"` and `"a "`, shows both sides as JSON, so the type or whitespace change is visible.
+  A change between values that would look alike, such as text `"42"` and the number `42`, `"a"` and `"a "`, or text with a zero-width or direction-override character, shows both sides as JSON with those characters escaped, so the change is visible.
   It links the workbook to desktop Excel (`ms-excel:ofe|u|<url>`) and the browser only for `https` SharePoint addresses (including OneDrive for work or school), where Graph's Excel functions work, and shows the host beside the links, since the address comes from the agent and a reviewer may open it before approving.
   A `|` in the address is encoded, since it separates Office URI arguments.
   A card with only a truncated preview shows the table once its complete arguments load, so a preview cannot hide a changed cell; for this tool they load without a click, since larger edits often arrive as an attachment.
