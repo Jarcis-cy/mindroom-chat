@@ -46,7 +46,7 @@ import {
 } from '../../../utils/room';
 import { nameInitials } from '../../../utils/common';
 import { RoomAvatar } from '../../../components/room-avatar';
-import { getMxIdLocalPart, rateLimitedActions } from '../../../utils/matrix';
+import { rateLimitedActions } from '../../../utils/matrix';
 import { Time } from '../../../components/message';
 import { useElementSizeObserver } from '../../../hooks/useElementSizeObserver';
 import { onEnterOrSpace, stopPropagation } from '../../../utils/keyboard';
@@ -66,6 +66,11 @@ import { settingsAtom } from '../../../state/settings';
 import { acceptInvite, acceptInvites } from './acceptInvite';
 
 const COMPACT_CARD_WIDTH = 548;
+// Embedding, override and isolate controls, and paragraph separators (C0/C1
+// controls such as NEL, and U+2029) that would end the isolates around the name.
+const BIDI_CONTROLS = /[\p{Cc}\u2029\u202A-\u202E\u2066-\u2069]/gu;
+// A longer name would push the real ID after it off-screen.
+const MAX_SENDER_NAME_LENGTH = 64;
 
 type InviteData = {
   room: Room;
@@ -76,6 +81,8 @@ type InviteData = {
   roomAlias?: string;
 
   senderId: string;
+  // The whole display name, for the spam filter; senderName is the shortened card label.
+  senderDisplayName?: string;
   senderName: string;
   inviteTs?: number;
   reason?: string;
@@ -85,7 +92,11 @@ type InviteData = {
   isEncrypted: boolean;
 };
 
-const makeInviteData = (mx: MatrixClient, room: Room, useAuthentication: boolean): InviteData => {
+export const makeInviteData = (
+  mx: MatrixClient,
+  room: Room,
+  useAuthentication: boolean
+): InviteData => {
   const userId = mx.getSafeUserId();
   const direct = isDirectInvite(room, userId);
 
@@ -103,9 +114,13 @@ const makeInviteData = (mx: MatrixClient, room: Room, useAuthentication: boolean
   const content = memberEvent?.getContent();
   const senderId = memberEvent?.getSender();
 
-  const senderName = senderId
-    ? getMemberDisplayName(room, senderId) ?? getMxIdLocalPart(senderId) ?? senderId
+  const senderDisplayName = senderId
+    ? getMemberDisplayName(room, senderId)?.replace(BIDI_CONTROLS, '')
     : undefined;
+  const senderNameChars = Array.from(senderDisplayName ?? '');
+  const shownSenderName =
+    senderNameChars.slice(0, MAX_SENDER_NAME_LENGTH).join('') +
+    (senderNameChars.length > MAX_SENDER_NAME_LENGTH ? '…' : '');
   const inviteTs = memberEvent?.getTs();
   const reason =
     content && 'reason' in content && typeof content.reason === 'string'
@@ -121,7 +136,13 @@ const makeInviteData = (mx: MatrixClient, room: Room, useAuthentication: boolean
     roomAlias: room.getCanonicalAlias() ?? undefined,
 
     senderId: senderId ?? 'Unknown',
-    senderName: senderName ?? 'Unknown',
+    senderDisplayName,
+    // A display name can claim any name or ID, so the real ID always shows next to it.
+    // The name is isolated (FSI...PDI) and the ID kept left-to-right (LRI...PDI), so neither
+    // the name's direction nor an RTL locale can reorder the ID.
+    senderName: shownSenderName
+      ? `\u2068${shownSenderName}\u2069 (\u2066${senderId}\u2069)`
+      : senderId ?? 'Unknown',
     inviteTs,
     reason,
 
@@ -131,10 +152,10 @@ const makeInviteData = (mx: MatrixClient, room: Room, useAuthentication: boolean
   };
 };
 
-const hasBadWords = (invite: InviteData): boolean =>
+export const hasBadWords = (invite: InviteData): boolean =>
   testBadWords(invite.roomName) ||
   testBadWords(invite.roomTopic ?? '') ||
-  testBadWords(invite.senderName) ||
+  testBadWords(invite.senderDisplayName ?? '') ||
   testBadWords(invite.senderId) ||
   testBadWords(invite.reason || '');
 
@@ -149,7 +170,7 @@ type InviteCardProps = {
   hideAvatar: boolean;
   disabled?: boolean;
 };
-function InviteCard({
+export function InviteCard({
   invite,
   compact,
   hour24Clock,
@@ -309,8 +330,8 @@ function InviteCard({
                 shouldUnescape
                 tOptions={{ interpolation: { escapeValue: true } }}
                 i18nKey="sharedUi.invites.from"
-                values={{ sender: invite.senderId }}
-                components={{ b: <b /> }}
+                values={{ sender: invite.senderName }}
+                components={{ b: <b title={invite.senderId} /> }}
               />
             </Text>
           </Box>
