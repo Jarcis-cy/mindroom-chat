@@ -5,6 +5,8 @@ import { useMatrixClient } from '../../hooks/useMatrixClient';
 import { ToolApprovalData } from './toolApproval';
 import { downloadMindroomSidecarBlob } from './sidecarDownload';
 import { ApprovalArgumentFields, countArgumentFields } from './ApprovalArgumentFields';
+import { ApprovalRangeEdit } from './ApprovalRangeEdit';
+import { parseExcelRangeEdit } from './excelRangeEdit';
 import * as css from './ApprovalArgumentFields.css';
 
 const PREVIEW_FIELDS = 3;
@@ -41,8 +43,14 @@ export function ApprovalArguments({ approval }: { approval: ToolApprovalData }) 
   }, [mx, open, complete, sourceKey, retry]);
   const shown = complete ?? approval.arguments;
   const total = countArgumentFields(shown);
+  // A truncated preview could hide changed cells, so the table waits for the complete arguments.
+  const rangeEdit = parseExcelRangeEdit(
+    approval.toolName,
+    complete ?? (approval.argumentsTruncated ? undefined : approval.arguments)
+  );
   return (
     <div className={css.Arguments}>
+      {rangeEdit && <ApprovalRangeEdit review={rangeEdit} />}
       {!open && <ApprovalArgumentFields value={approval.arguments} limit={PREVIEW_FIELDS} />}
       <Button
         type="button"

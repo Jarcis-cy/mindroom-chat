@@ -2,6 +2,19 @@
 
 ## Runbook
 
+### Review Excel range edits cell by cell (2026-11-02)
+
+- Why: the approval card for MindRoom's `microsoft_files_excel_update_range` showed raw `values` and `expected_formulas` grids, so a reviewer could not see which cells an edit changes, and a formula replaced by a plain number looked like any other value.
+- Change: `excelRangeEdit.ts` reads the call's complete arguments as a per-cell diff: only changed cells, by Excel address, with before (`expected_formulas`), after (`values`, where `null` keeps the value), and any `number_formats` entry.
+  A cell counts as unchanged only when type and value are equal and its text holds no `***redacted***`, because two different redacted secrets render the same.
+  `ApprovalRangeEdit` draws the diff as a table above the argument fields, inside `ApprovalArguments`, so the card, the review panel, and the receipt all show it.
+  It links the workbook to desktop Excel (`ms-excel:ofe|u|<url>`) and the browser only for `https` OneDrive and SharePoint addresses, since the address comes from the agent.
+  A card with only a truncated preview shows the table once its complete arguments load, so a preview cannot hide a changed cell.
+- Requires: mindroom-ai/mindroom#3667, which adds `expected_formulas` and `number_formats`; calls without them keep the plain argument fields.
+- Tests: `excelRangeEdit.test.ts`, `ApprovalRangeEdit.test.tsx`, and `e2e/excel-range-approval.spec.ts` (phone and desktop, light and dark).
+  The 16 non-English translations still need a native-speaker check.
+- Next: none.
+
 ### Open Spark email backlinks from messages (2026-11-02)
 
 - Why: Spark's `readdlespark://` backlinks open one email directly in Spark on desktop and mobile, but Chat drops their `href`, so the link text shows without a link.
