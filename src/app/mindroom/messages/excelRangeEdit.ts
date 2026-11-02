@@ -63,13 +63,17 @@ const workbookUrl = (value: unknown): string | null => {
   try {
     const url = new URL(value);
     const trusted = url.hostname.toLowerCase().endsWith('.sharepoint.com');
-    return url.protocol === 'https:' && !url.username && !url.password && trusted ? url.href : null;
+    // `|` separates Office URI arguments, so an encoded address cannot add arguments to the desktop link.
+    const href = url.href.replace(/\|/g, '%7C');
+    return url.protocol === 'https:' && !url.username && !url.password && trusted ? href : null;
   } catch {
     return null;
   }
 };
 
 // Equal only when nothing hides a difference: same type and value, and no redacted text on either side.
+// The backend leaves such cells unwritten. Matrix carries floats as text, so a number and the same text compare
+// equal here; the backend still tells them apart and writes the text.
 const unchanged = (before: ExcelCellValue, after: ExcelCellValue): boolean =>
   typeof before === typeof after &&
   before === after &&

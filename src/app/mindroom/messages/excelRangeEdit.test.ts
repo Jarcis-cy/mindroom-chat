@@ -155,6 +155,19 @@ describe('parseExcelRangeEdit', () => {
       parseExcelRangeEdit(EXCEL_RANGE_EDIT_TOOL, edit({ expected_web_url: url }))?.webUrl
     ).toBe('https://contoso-my.sharepoint.com/personal/a/Documents/Q3%20plan.xlsx');
   });
+
+  it('encodes Office URI separators so the desktop link carries one address', () => {
+    const url = 'https://contoso.sharepoint.com/x.xlsx?a=1|u|https://contoso.sharepoint.com/y.xlsx';
+    const webUrl = parseExcelRangeEdit(
+      EXCEL_RANGE_EDIT_TOOL,
+      edit({ expected_web_url: url })
+    )?.webUrl;
+
+    expect(webUrl).toBe(
+      'https://contoso.sharepoint.com/x.xlsx?a=1%7Cu%7Chttps://contoso.sharepoint.com/y.xlsx'
+    );
+    expect(excelDesktopUrl(webUrl!).split('|')).toHaveLength(3);
+  });
 });
 
 describe('excelDesktopUrl', () => {
