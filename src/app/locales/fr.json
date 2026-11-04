@@ -1308,9 +1308,6 @@
     "commands": {
       "CommandMe": "Envoyer un message d’action",
       "CommandNotice": "Envoyer un message d’avertissement",
-      "CommandShrug": "Envoyer ¯\\_(ツ)_/¯ comme message",
-      "CommandTableFlip": "Envoyer {{value1}} comme message",
-      "CommandUnFlip": "Envoyer {{value1}} comme message",
       "CommandStartDm": "Démarrer une conversation directe avec un utilisateur. Exemple : /startdm userId1",
       "CommandJoin": "Rejoindre un salon avec son adresse. Exemple : /join address1 address2",
       "CommandLeave": "Quitter le salon actuel.",
@@ -1326,7 +1323,13 @@
       "CommandConvertToDm": "Convertir le salon en conversation directe",
       "CommandConvertToRoom": "Convertir la conversation directe en salon",
       "CommandDelete": "Supprimer les messages d’utilisateurs. Exemple : /delete userId1 servername -past 1d|2h|5m|30s [-t m.room.message] [-r spam]",
-      "CommandAcl": "Gérer la liste de contrôle d’accès du serveur. Exemple : /acl [-a servername1] [-d servername2] [-ra servername1] [-rd servername2]"
+      "CommandAcl": "Gérer la liste de contrôle d’accès du serveur. Exemple : /acl [-a servername1] [-d servername2] [-ra servername1] [-rd servername2]",
+      "CommandStop": "Stop the running task on the bridge agent",
+      "CommandInterrupt": "Interrupt the task and send a new instruction",
+      "CommandNewChat": "Start a fresh agent session",
+      "CommandModel": "Show or switch the agent model",
+      "CommandExpert": "Manage domain experts",
+      "CommandStatus": "Show agent status"
     },
     "item": {
       "value1Emoji": "{{value1}} emoji"

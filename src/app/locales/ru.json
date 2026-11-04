@@ -1316,9 +1316,6 @@
     "commands": {
       "CommandMe": "Отправить сообщение-действие",
       "CommandNotice": "Отправить сообщение-уведомление",
-      "CommandShrug": "Отправить ¯\\_(ツ)_/¯ сообщением",
-      "CommandTableFlip": "Отправить {{value1}} сообщением",
-      "CommandUnFlip": "Отправить {{value1}} сообщением",
       "CommandStartDm": "Начать личную переписку с пользователем. Пример: /startdm userId1",
       "CommandJoin": "Войти в комнату по адресу. Пример: /join address1 address2",
       "CommandLeave": "Покинуть текущую комнату.",
@@ -1334,7 +1331,13 @@
       "CommandConvertToDm": "Преобразовать комнату в личную переписку",
       "CommandConvertToRoom": "Преобразовать личную переписку в комнату",
       "CommandDelete": "Удалить сообщения пользователей. Пример: /delete userId1 servername -past 1d|2h|5m|30s [-t m.room.message] [-r spam]",
-      "CommandAcl": "Управлять списком контроля доступа сервера. Пример /acl [-a servername1] [-d servername2] [-ra servername1] [-rd servername2]"
+      "CommandAcl": "Управлять списком контроля доступа сервера. Пример /acl [-a servername1] [-d servername2] [-ra servername1] [-rd servername2]",
+      "CommandStop": "Stop the running task on the bridge agent",
+      "CommandInterrupt": "Interrupt the task and send a new instruction",
+      "CommandNewChat": "Start a fresh agent session",
+      "CommandModel": "Show or switch the agent model",
+      "CommandExpert": "Manage domain experts",
+      "CommandStatus": "Show agent status"
     },
     "item": {
       "value1Emoji": "Эмодзи {{value1}}"

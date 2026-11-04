@@ -1296,9 +1296,6 @@
     "commands": {
       "CommandMe": "Kirim pesan tindakan",
       "CommandNotice": "Kirim pesan pemberitahuan",
-      "CommandShrug": "Kirim ¯\\_(ツ)_/¯ sebagai pesan",
-      "CommandTableFlip": "Kirim {{value1}} sebagai pesan",
-      "CommandUnFlip": "Kirim {{value1}} sebagai pesan",
       "CommandStartDm": "Mulai pesan langsung dengan pengguna. Contoh: /startdm userId1",
       "CommandJoin": "Bergabung ke ruang dengan alamat. Contoh: /join address1 address2",
       "CommandLeave": "Tinggalkan ruang saat ini.",
@@ -1314,7 +1311,13 @@
       "CommandConvertToDm": "Ubah ruang menjadi pesan langsung",
       "CommandConvertToRoom": "Ubah pesan langsung menjadi ruang",
       "CommandDelete": "Hapus pesan pengguna. Contoh: /delete userId1 servername -past 1d|2h|5m|30s [-t m.room.message] [-r spam]",
-      "CommandAcl": "Kelola daftar kontrol akses server. Contoh /acl [-a servername1] [-d servername2] [-ra servername1] [-rd servername2]"
+      "CommandAcl": "Kelola daftar kontrol akses server. Contoh /acl [-a servername1] [-d servername2] [-ra servername1] [-rd servername2]",
+      "CommandStop": "Stop the running task on the bridge agent",
+      "CommandInterrupt": "Interrupt the task and send a new instruction",
+      "CommandNewChat": "Start a fresh agent session",
+      "CommandModel": "Show or switch the agent model",
+      "CommandExpert": "Manage domain experts",
+      "CommandStatus": "Show agent status"
     },
     "item": {
       "value1Emoji": "Emoji {{value1}}"

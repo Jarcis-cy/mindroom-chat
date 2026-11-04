@@ -33,7 +33,7 @@ import {
 import { useSetting } from '../../state/hooks/settings';
 import { settingsAtom } from '../../state/settings';
 import { getMentionContent } from '../../utils/room';
-import { Command, SHRUG, TABLEFLIP, UNFLIP, useCommands } from '../../hooks/useCommands';
+import { Command, useCommands } from '../../hooks/useCommands';
 import { useRoomInputSendSessionController } from './RoomInputMindroomExtensions';
 import type { RoomInputReplyDraftContext } from '../threads/useRoomInputSendSessionController';
 import { restoreEditorContent } from '../../components/editor/utils';
@@ -227,7 +227,14 @@ export const RoomInput = forwardRef<HTMLDivElement, RoomInputProps>(
         );
         let msgType = MsgType.Text;
 
-        if (commandName) {
+        // fork: 只有客户端自己会处理的命令才裁掉 "/name" 前缀。转发型
+        // (/stop、/interrupt …)和未知命令必须保留原文 —— 它们要原样发
+        // 给房间,由桥接 Agent 解释。
+        const commandContent = commandName
+          ? commands[commandName as Command]
+          : undefined;
+        const isForwardCommand = commandContent?.forward === true;
+        if (commandName && !isForwardCommand) {
           plainText = trimCommand(commandName, plainText);
           customHtml = trimCommand(commandName, customHtml);
         }
@@ -235,20 +242,8 @@ export const RoomInput = forwardRef<HTMLDivElement, RoomInputProps>(
           msgType = MsgType.Emote;
         } else if (commandName === Command.Notice) {
           msgType = MsgType.Notice;
-        } else if (commandName === Command.Shrug) {
-          plainText = `${SHRUG} ${plainText}`;
-          customHtml = `${SHRUG} ${customHtml}`;
-        } else if (commandName === Command.TableFlip) {
-          plainText = `${TABLEFLIP} ${plainText}`;
-          customHtml = `${TABLEFLIP} ${customHtml}`;
-        } else if (commandName === Command.UnFlip) {
-          plainText = `${UNFLIP} ${plainText}`;
-          customHtml = `${UNFLIP} ${customHtml}`;
-        } else if (commandName) {
-          const commandContent = commands[commandName as Command];
-          if (commandContent) {
-            commandContent.exe(plainText);
-          }
+        } else if (commandName && commandContent && !isForwardCommand) {
+          commandContent.exe(plainText);
           resetEditor(editor);
           resetEditorHistory(editor);
           sendTypingStatus(false);
@@ -257,6 +252,7 @@ export const RoomInput = forwardRef<HTMLDivElement, RoomInputProps>(
           }
           return;
         }
+        // fork: 转发型与未知命令落到这里,按普通消息原样发送。
 
         const hasText = plainText !== '';
         const hasUploads = attachmentAccess.snapshot().staged.length > 0;

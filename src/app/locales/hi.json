@@ -2119,12 +2119,15 @@
       "CommandMyRoomAvatar": "मौजूदा रूम में प्रोफ़ाइल चित्र बदलें. उदाहरण: /myroomavatar mxc://xyzabc",
       "CommandMyRoomNick": "वर्तमान रूम में उपनाम बदलें।",
       "CommandNotice": "सूचना संदेश भेजें",
-      "CommandShrug": "¯\\_(ツ)_/¯ को संदेश के रूप में भेजें",
       "CommandStartDm": "उपयोगकर्ता के साथ सीधा संदेश प्रारंभ करें. उदाहरण: /startdm userId1",
-      "CommandTableFlip": "संदेश के रूप में {{value1}} भेजें",
       "CommandUnBan": "उपयोगकर्ता का रूम प्रतिबंध हटाएँ। उदाहरण: /unban userId1 userId2",
-      "CommandUnFlip": "संदेश के रूप में {{value1}} भेजें",
-      "CommandUnIgnore": "उपयोगकर्ता को अनदेखा करना बंद करें। उदाहरण: /unignore userId1 userId2"
+      "CommandUnIgnore": "उपयोगकर्ता को अनदेखा करना बंद करें। उदाहरण: /unignore userId1 userId2",
+      "CommandStop": "Stop the running task on the bridge agent",
+      "CommandInterrupt": "Interrupt the task and send a new instruction",
+      "CommandNewChat": "Start a fresh agent session",
+      "CommandModel": "Show or switch the agent model",
+      "CommandExpert": "Manage domain experts",
+      "CommandStatus": "Show agent status"
     },
     "compactUploadCardRenderer": {
       "cancelUpload": "अपलोड रद्द करें",

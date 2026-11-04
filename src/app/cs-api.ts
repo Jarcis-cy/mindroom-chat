@@ -50,6 +50,9 @@ const isLocalIpv4 = (host: string): boolean => {
   if (first === 192 && second === 168) return true;
   if (first === 172 && second >= 16 && second <= 31) return true;
   if (first === 169 && second === 254) return true;
+  // fork: 100.64.0.0/10 —— CGNAT 与 Tailscale 的地址段。自建的私有部署
+  // 常常只暴露在这个网段上,用 http 访问不该被当成"不安全的公网地址"。
+  if (first === 100 && second >= 64 && second <= 127) return true;
 
   return false;
 };

@@ -2119,12 +2119,15 @@
       "CommandMyRoomAvatar": "বর্তমান রুমে প্রোফাইল ছবি পরিবর্তন করুন। উদাহরণ: /myroomavatar mxc://xyzabc",
       "CommandMyRoomNick": "বর্তমান রুমে ডাকনাম বদলান।",
       "CommandNotice": "নোটিশ বার্তা পাঠান",
-      "CommandShrug": "বার্তা হিসাবে ¯\\_(ツ)_/¯ পাঠান",
       "CommandStartDm": "ব্যবহারকারীর সাথে সরাসরি বার্তা শুরু করুন। উদাহরণ: /startdm userId1",
-      "CommandTableFlip": "বার্তা হিসাবে {{value1}} পাঠান",
       "CommandUnBan": "ব্যবহারকারীর রুমের নিষেধাজ্ঞা তুলে নিন। উদাহরণ: /unban userId1 userId2",
-      "CommandUnFlip": "বার্তা হিসাবে {{value1}} পাঠান",
-      "CommandUnIgnore": "ব্যবহারকারীকে উপেক্ষা করা বন্ধ করুন। উদাহরণ: /unignore userId1 userId2"
+      "CommandUnIgnore": "ব্যবহারকারীকে উপেক্ষা করা বন্ধ করুন। উদাহরণ: /unignore userId1 userId2",
+      "CommandStop": "Stop the running task on the bridge agent",
+      "CommandInterrupt": "Interrupt the task and send a new instruction",
+      "CommandNewChat": "Start a fresh agent session",
+      "CommandModel": "Show or switch the agent model",
+      "CommandExpert": "Manage domain experts",
+      "CommandStatus": "Show agent status"
     },
     "compactUploadCardRenderer": {
       "cancelUpload": "আপলোড বাতিল করুন",

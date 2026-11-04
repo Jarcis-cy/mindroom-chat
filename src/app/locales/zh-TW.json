@@ -1296,9 +1296,6 @@
     "commands": {
       "CommandMe": "傳送操作訊息",
       "CommandNotice": "傳送通知訊息",
-      "CommandShrug": "將 ¯\\_(ツ)_/¯ 作為訊息傳送",
-      "CommandTableFlip": "將 {{value1}} 作為訊息傳送",
-      "CommandUnFlip": "將 {{value1}} 作為訊息傳送",
       "CommandStartDm": "與使用者開始私訊。範例：/startdm userId1",
       "CommandJoin": "使用地址加入房間。範例：/join address1 address2",
       "CommandLeave": "離開目前房間。",
@@ -1314,7 +1311,13 @@
       "CommandConvertToDm": "將房間轉換為直接訊息",
       "CommandConvertToRoom": "將私訊轉換為房間",
       "CommandDelete": "刪除使用者的訊息。範例：/delete userId1 servername -past 1d|2h|5m|30s [-t m.room.message] [-r spam]",
-      "CommandAcl": "管理伺服器存取控制清單。範例 /acl [-a servername1] [-d servername2] [-ra servername1] [-rd servername2]"
+      "CommandAcl": "管理伺服器存取控制清單。範例 /acl [-a servername1] [-d servername2] [-ra servername1] [-rd servername2]",
+      "CommandStop": "Stop the running task on the bridge agent",
+      "CommandInterrupt": "Interrupt the task and send a new instruction",
+      "CommandNewChat": "Start a fresh agent session",
+      "CommandModel": "Show or switch the agent model",
+      "CommandExpert": "Manage domain experts",
+      "CommandStatus": "Show agent status"
     },
     "item": {
       "value1Emoji": "{{value1}} 表情符號"

@@ -1296,9 +1296,6 @@
     "commands": {
       "CommandMe": "Eylem mesajı gönder",
       "CommandNotice": "Bilgilendirme mesajı gönder",
-      "CommandShrug": "Mesaj olarak ¯\\_(ツ)_/¯ gönder",
-      "CommandTableFlip": "Mesaj olarak {{value1}} gönder",
-      "CommandUnFlip": "Mesaj olarak {{value1}} gönder",
       "CommandStartDm": "Kullanıcıyla doğrudan mesaj başlat. Örnek: /startdm userId1",
       "CommandJoin": "Adresiyle odaya katıl. Örnek: /join address1 address2",
       "CommandLeave": "Geçerli odadan ayrıl.",
@@ -1314,7 +1311,13 @@
       "CommandConvertToDm": "Odayı doğrudan mesaja dönüştür",
       "CommandConvertToRoom": "Doğrudan mesajı odaya dönüştür",
       "CommandDelete": "Kullanıcıların mesajlarını sil. Örnek: /delete userId1 servername -past 1d|2h|5m|30s [-t m.room.message] [-r spam]",
-      "CommandAcl": "Sunucu erişim denetim listesini yönet. Örnek /acl [-a servername1] [-d servername2] [-ra servername1] [-rd servername2]"
+      "CommandAcl": "Sunucu erişim denetim listesini yönet. Örnek /acl [-a servername1] [-d servername2] [-ra servername1] [-rd servername2]",
+      "CommandStop": "Stop the running task on the bridge agent",
+      "CommandInterrupt": "Interrupt the task and send a new instruction",
+      "CommandNewChat": "Start a fresh agent session",
+      "CommandModel": "Show or switch the agent model",
+      "CommandExpert": "Manage domain experts",
+      "CommandStatus": "Show agent status"
     },
     "item": {
       "value1Emoji": "{{value1}} emojisi"

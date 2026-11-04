@@ -1300,9 +1300,6 @@
     "commands": {
       "CommandMe": "Actiebericht verzenden",
       "CommandNotice": "Meldingsbericht verzenden",
-      "CommandShrug": "¯\\_(ツ)_/¯ als bericht verzenden",
-      "CommandTableFlip": "{{value1}} als bericht verzenden",
-      "CommandUnFlip": "{{value1}} als bericht verzenden",
       "CommandStartDm": "Direct bericht met gebruiker starten. Voorbeeld: /startdm userId1",
       "CommandJoin": "Deelnemen aan kamer via adres. Voorbeeld: /join address1 address2",
       "CommandLeave": "Huidige kamer verlaten.",
@@ -1318,7 +1315,13 @@
       "CommandConvertToDm": "Kamer omzetten in direct bericht",
       "CommandConvertToRoom": "Direct bericht omzetten in kamer",
       "CommandDelete": "Berichten van gebruikers verwijderen. Voorbeeld: /delete userId1 servername -past 1d|2h|5m|30s [-t m.room.message] [-r spam]",
-      "CommandAcl": "Toegangsbeheerlijst van server beheren. Voorbeeld: /acl [-a servername1] [-d servername2] [-ra servername1] [-rd servername2]"
+      "CommandAcl": "Toegangsbeheerlijst van server beheren. Voorbeeld: /acl [-a servername1] [-d servername2] [-ra servername1] [-rd servername2]",
+      "CommandStop": "Stop the running task on the bridge agent",
+      "CommandInterrupt": "Interrupt the task and send a new instruction",
+      "CommandNewChat": "Start a fresh agent session",
+      "CommandModel": "Show or switch the agent model",
+      "CommandExpert": "Manage domain experts",
+      "CommandStatus": "Show agent status"
     },
     "item": {
       "value1Emoji": "{{value1}} emoji"

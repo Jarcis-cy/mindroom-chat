@@ -29,10 +29,6 @@ import { getStateEvent } from '../utils/room';
 import { splitWithSpace } from '../utils/common';
 import { createRoomEncryptionState } from '../components/create-room';
 
-export const SHRUG = '¯\\_(ツ)_/¯';
-export const TABLEFLIP = '(╯°□°)╯︵ ┻━┻';
-export const UNFLIP = '┬─┬ノ( º_ºノ)';
-
 const FLAG_PAT = '(?:^|\\s)-(\\w+)\\b';
 const FLAG_REG = new RegExp(FLAG_PAT);
 const FLAG_REG_G = new RegExp(FLAG_PAT, 'g');
@@ -141,7 +137,6 @@ export type CommandExe = (payload: string) => Promise<void>;
 export enum Command {
   Me = 'me',
   Notice = 'notice',
-  Shrug = 'shrug',
   StartDm = 'startdm',
   Join = 'join',
   Leave = 'leave',
@@ -156,16 +151,25 @@ export enum Command {
   MyRoomAvatar = 'myroomavatar',
   ConvertToDm = 'converttodm',
   ConvertToRoom = 'converttoroom',
-  TableFlip = 'tableflip',
-  UnFlip = 'unflip',
   Delete = 'delete',
   Acl = 'acl',
+  // fork: 这些是发给桥接 Agent 的命令(pi-courier 侧处理),客户端只负责
+  // 原样发出去 —— 不进 exe,不进房间状态操作。
+  Stop = 'stop',
+  Interrupt = 'interrupt',
+  NewChat = 'new',
+  Model = 'model',
+  Expert = 'expert',
+  Status = 'status',
 }
 
 export type CommandContent = {
   name: string;
   description: string;
   exe: CommandExe;
+  /** fork: 转发型命令。客户端不执行,原样把 "/name …" 发给房间,
+   *  由桥接 Agent 解释(例如 /stop、/interrupt)。 */
+  forward?: boolean;
 };
 
 export type CommandRecord = Record<Command, CommandContent>;
@@ -184,21 +188,6 @@ export const useCommands = (mx: MatrixClient, room: Room): CommandRecord => {
       [Command.Notice]: {
         name: Command.Notice,
         description: t('sharedUi.commands.CommandNotice'),
-        exe: async () => undefined,
-      },
-      [Command.Shrug]: {
-        name: Command.Shrug,
-        description: t('sharedUi.commands.CommandShrug'),
-        exe: async () => undefined,
-      },
-      [Command.TableFlip]: {
-        name: Command.TableFlip,
-        description: t('sharedUi.commands.CommandTableFlip', { value1: TABLEFLIP }),
-        exe: async () => undefined,
-      },
-      [Command.UnFlip]: {
-        name: Command.UnFlip,
-        description: t('sharedUi.commands.CommandUnFlip', { value1: UNFLIP }),
         exe: async () => undefined,
       },
       [Command.StartDm]: {
@@ -480,6 +469,42 @@ export const useCommands = (mx: MatrixClient, room: Room): CommandRecord => {
             );
           }
         },
+      },
+      [Command.Stop]: {
+        name: Command.Stop,
+        description: t('sharedUi.commands.CommandStop'),
+        exe: async () => undefined,
+        forward: true,
+      },
+      [Command.Interrupt]: {
+        name: Command.Interrupt,
+        description: t('sharedUi.commands.CommandInterrupt'),
+        exe: async () => undefined,
+        forward: true,
+      },
+      [Command.NewChat]: {
+        name: Command.NewChat,
+        description: t('sharedUi.commands.CommandNewChat'),
+        exe: async () => undefined,
+        forward: true,
+      },
+      [Command.Model]: {
+        name: Command.Model,
+        description: t('sharedUi.commands.CommandModel'),
+        exe: async () => undefined,
+        forward: true,
+      },
+      [Command.Expert]: {
+        name: Command.Expert,
+        description: t('sharedUi.commands.CommandExpert'),
+        exe: async () => undefined,
+        forward: true,
+      },
+      [Command.Status]: {
+        name: Command.Status,
+        description: t('sharedUi.commands.CommandStatus'),
+        exe: async () => undefined,
+        forward: true,
       },
       [Command.Acl]: {
         name: Command.Acl,

@@ -1296,9 +1296,6 @@
     "commands": {
       "CommandMe": "アクションメッセージを送信する",
       "CommandNotice": "通知メッセージを送信する",
-      "CommandShrug": "¯\\_(ツ)_/¯ をメッセージとして送信します",
-      "CommandTableFlip": "{{value1}} をメッセージとして送信",
-      "CommandUnFlip": "{{value1}} をメッセージとして送信",
       "CommandStartDm": "ユーザーとのダイレクトメッセージを開始します。例：/startdm userId1",
       "CommandJoin": "アドレスを指定してルームに参加します。例：/join address1 address2",
       "CommandLeave": "現在のルームを出ます。",
@@ -1314,7 +1311,13 @@
       "CommandConvertToDm": "ルームをダイレクト メッセージに変換する",
       "CommandConvertToRoom": "ダイレクト メッセージをルームに変換する",
       "CommandDelete": "ユーザーのメッセージを削除します。例：/delete userId1 servername -past 1d|2h|5m|30s [-t m.room.message] [-r spam]",
-      "CommandAcl": "サーバーのアクセス制御リストを管理します。例 /acl [-a servername1] [-d servername2] [-ra servername1] [-rd servername2]"
+      "CommandAcl": "サーバーのアクセス制御リストを管理します。例 /acl [-a servername1] [-d servername2] [-ra servername1] [-rd servername2]",
+      "CommandStop": "Stop the running task on the bridge agent",
+      "CommandInterrupt": "Interrupt the task and send a new instruction",
+      "CommandNewChat": "Start a fresh agent session",
+      "CommandModel": "Show or switch the agent model",
+      "CommandExpert": "Manage domain experts",
+      "CommandStatus": "Show agent status"
     },
     "item": {
       "value1Emoji": "{{value1}} 絵文字"

@@ -1300,9 +1300,6 @@
     "commands": {
       "CommandMe": "Send action message",
       "CommandNotice": "Send notice message",
-      "CommandShrug": "Send ¯\\_(ツ)_/¯ as message",
-      "CommandTableFlip": "Send {{value1}} as message",
-      "CommandUnFlip": "Send {{value1}} as message",
       "CommandStartDm": "Start direct message with user. Example: /startdm userId1",
       "CommandJoin": "Join room with address. Example: /join address1 address2",
       "CommandLeave": "Leave current room.",
@@ -1318,7 +1315,13 @@
       "CommandConvertToDm": "Convert room to direct message",
       "CommandConvertToRoom": "Convert direct message to room",
       "CommandDelete": "Delete messages from users. Example: /delete userId1 servername -past 1d|2h|5m|30s [-t m.room.message] [-r spam]",
-      "CommandAcl": "Manage server access control list. Example /acl [-a servername1] [-d servername2] [-ra servername1] [-rd servername2]"
+      "CommandAcl": "Manage server access control list. Example /acl [-a servername1] [-d servername2] [-ra servername1] [-rd servername2]",
+      "CommandStop": "Stop the running task on the bridge agent",
+      "CommandInterrupt": "Interrupt the task and send a new instruction",
+      "CommandNewChat": "Start a fresh agent session",
+      "CommandModel": "Show or switch the agent model",
+      "CommandExpert": "Manage domain experts",
+      "CommandStatus": "Show agent status"
     },
     "item": {
       "value1Emoji": "{{value1}} emoji"

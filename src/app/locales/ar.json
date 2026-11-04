@@ -1332,9 +1332,6 @@
     "commands": {
       "CommandMe": "إرسال رسالة إجراء",
       "CommandNotice": "إرسال رسالة تنبيه",
-      "CommandShrug": "إرسال ¯\\_(ツ)_/¯ كرسالة",
-      "CommandTableFlip": "إرسال ⁨{{value1}}⁩ كرسالة",
-      "CommandUnFlip": "إرسال ⁨{{value1}}⁩ كرسالة",
       "CommandStartDm": "بدء رسالة مباشرة مع مستخدم. مثال: ⁨/startdm userId1⁩",
       "CommandJoin": "الانضمام إلى غرفة باستخدام عنوان. مثال: ⁨/join address1 address2⁩",
       "CommandLeave": "مغادرة الغرفة الحالية.",
@@ -1350,7 +1347,13 @@
       "CommandConvertToDm": "تحويل الغرفة إلى رسالة مباشرة",
       "CommandConvertToRoom": "تحويل الرسالة المباشرة إلى غرفة",
       "CommandDelete": "حذف رسائل مستخدمين. مثال: ⁨/delete userId1 servername -past 1d|2h|5m|30s [-t m.room.message] [-r spam]⁩",
-      "CommandAcl": "إدارة قائمة التحكم بوصول الخادم. مثال ⁨/acl [-a servername1] [-d servername2] [-ra servername1] [-rd servername2]⁩"
+      "CommandAcl": "إدارة قائمة التحكم بوصول الخادم. مثال ⁨/acl [-a servername1] [-d servername2] [-ra servername1] [-rd servername2]⁩",
+      "CommandStop": "Stop the running task on the bridge agent",
+      "CommandInterrupt": "Interrupt the task and send a new instruction",
+      "CommandNewChat": "Start a fresh agent session",
+      "CommandModel": "Show or switch the agent model",
+      "CommandExpert": "Manage domain experts",
+      "CommandStatus": "Show agent status"
     },
     "item": {
       "value1Emoji": "رمز ⁨{{value1}}⁩ التعبيري"
